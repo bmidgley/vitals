@@ -1,5 +1,5 @@
 {
-  "name": "bluetooth",
+  "name": "vitals",
   "version": "1.0.0",
   "description": "Monitor your oxygen saturation and heart rate with a bluetooth pulse oximeter",
   "main": "main.js",
