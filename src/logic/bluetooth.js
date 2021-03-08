@@ -1,16 +1,14 @@
-import { handleData } from '../adapter/viatom-pulse-oximetry.js';
+import { registerHandler as registerHandlerHealthtree, serviceUuid as serviceUuidHealthtree } from '../adapter/healthtree-pulse-oximetry.js';
+import { registerHandler as registerHandlerViatom, serviceUuid as serviceUuidViatom } from '../adapter/viatom-pulse-oximetry.js';
 
 const demo = document.body.querySelector('demo-view');
-
-const SERVICE_UUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
-const DEVICE_NAME = 'OXIMETER';
 
 let isConnected = false;
 let device = null;
 
 function onDisconnected(e) {
   const t = event.target;
-  alert('Device ' + t.name + ' is disconnected.');
+  // alert('Device ' + t.name + ' is disconnected.');
   isConnected = false;
   device = null;
   demo.disconnected();
@@ -27,20 +25,15 @@ function disconnect() {
 async function connect() {
   console.log('connecting...');
   device = await navigator.bluetooth.requestDevice({
-    optionalServices: [SERVICE_UUID],
-    filters: [{ name: DEVICE_NAME }],
+    optionalServices: [serviceUuidHealthtree, serviceUuidViatom],
+    filters: [{ name: 'OXIMETER' }, { name: 'PC-60F_SN033668' }],
     //acceptAllDevices: true,
   });
   const server = await device.gatt.connect();
-  const service = await server.getPrimaryService(SERVICE_UUID);
-  const characteristics = await service.getCharacteristics();
-  const oximetry = characteristics[3];
 
-  console.log('characteristics', characteristics);
-  console.log('oximetry', oximetry);
+  registerHandlerViatom(server);
+  registerHandlerHealthtree(server);
 
-  oximetry.addEventListener('characteristicvaluechanged', handleData);
-  oximetry.startNotifications();
   isConnected = true;
   device.addEventListener('gattserverdisconnected', onDisconnected);
 }
