@@ -2,8 +2,8 @@ import { handleData } from '../adapter/viatom-pulse-oximetry.js';
 
 const demo = document.body.querySelector('demo-view');
 
-const SERVICE_UUID = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
-const DEVICE_NAME = 'PC-60F_SN033668';
+const SERVICE_UUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
+const DEVICE_NAME = 'OXIMETER';
 
 let isConnected = false;
 let device = null;
@@ -34,7 +34,7 @@ async function connect() {
   const server = await device.gatt.connect();
   const service = await server.getPrimaryService(SERVICE_UUID);
   const characteristics = await service.getCharacteristics();
-  const oximetry = characteristics[1];
+  const oximetry = characteristics[3];
 
   console.log('characteristics', characteristics);
   console.log('oximetry', oximetry);

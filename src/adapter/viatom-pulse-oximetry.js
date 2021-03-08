@@ -12,8 +12,8 @@ let dataTable = [];
 
 function parseVitals(arr) {
   const now = timely().format('HH:mm');
-  const sats = arr[5];
-  const bpm = arr[6];
+  const sats = arr[4];
+  const bpm = arr[5];
 
   demo.sats = sats;
   demo.bpm = bpm;
@@ -48,11 +48,11 @@ function parseGraph(arr) {
 function parseData(arr) {
   console.log(arr);
   switch (arr[3]) {
+    case 0:
+      return parseVitals(arr);
     case 3:
     case 6:
       return;
-    case 8:
-      return parseVitals(arr);
     case 7:
       parseSignal(arr);
       return parseGraph(arr.slice(5, 10));
