@@ -15,6 +15,8 @@ function parseVitals(arr) {
   const sats = arr[4];
   const bpm = arr[5];
 
+  if (sats == 127) return;
+
   demo.sats = sats;
   demo.bpm = bpm;
   if (now !== previousMinute) {
@@ -49,13 +51,15 @@ function parseData(arr) {
   console.log(arr);
   switch (arr[3]) {
     case 0:
-      return parseVitals(arr);
+      parseVitals(arr);
+      parseGraph(arr.slice(8, 37));
+      return;
     case 3:
     case 6:
       return;
     case 7:
       parseSignal(arr);
-      return parseGraph(arr.slice(5, 10));
+      return;
     default:
       console.error('unknown flag', arr[3]);
   }
