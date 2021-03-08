@@ -48,14 +48,14 @@ function parseGraph(arr) {
 function parseData(arr) {
   console.log(arr);
   switch (arr[3]) {
-    case 0:
-      return parseVitals(arr);
     case 3:
     case 6:
       return;
     case 7:
       parseSignal(arr);
       return parseGraph(arr.slice(5, 10));
+    case 8:
+      return parseVitals(arr);
     default:
       console.error('unknown flag', arr);
   }
