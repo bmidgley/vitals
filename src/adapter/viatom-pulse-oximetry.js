@@ -61,7 +61,7 @@ function parseData(arr) {
   }
 }
 
-const NEW_LINE_FLAG = 170;
+const NEW_LINE_FLAG = 255;
 
 export function handleData(e) {
   const t = e.target;
