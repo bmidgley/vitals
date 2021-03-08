@@ -51,11 +51,11 @@ function parseData(arr) {
     case 3:
     case 6:
       return;
+    case 8:
+      return parseVitals(arr);
     case 7:
       parseSignal(arr);
       return parseGraph(arr.slice(5, 10));
-    case 8:
-      return parseVitals(arr);
     default:
       console.error('unknown flag', arr);
   }
