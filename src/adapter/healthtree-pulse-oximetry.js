@@ -12,8 +12,10 @@ let dataTable = [];
 
 function parseVitals(arr) {
   const now = timely().format('HH:mm');
-  const sats = arr[5];
-  const bpm = arr[6];
+  const sats = arr[4];
+  const bpm = arr[5];
+
+  if (sats == 127) return;
 
   demo.sats = sats;
   demo.bpm = bpm;
@@ -48,20 +50,22 @@ function parseGraph(arr) {
 function parseData(arr) {
   console.log(arr);
   switch (arr[3]) {
+    case 0:
+      parseVitals(arr);
+      parseGraph(arr.slice(8, 37));
+      return;
     case 3:
     case 6:
       return;
-    case 8:
-      return parseVitals(arr);
     case 7:
       parseSignal(arr);
-      return parseGraph(arr.slice(5, 10));
+      return;
     default:
-      console.error('unknown flag', arr);
+      console.error('unknown flag', arr[3]);
   }
 }
 
-const NEW_LINE_FLAG = 170;
+const NEW_LINE_FLAG = 255;
 
 function handleData(e) {
   const t = e.target;
@@ -82,13 +86,13 @@ function handleData(e) {
   //console.log(rawData);
 }
 
-const serviceUuid  = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+const serviceUuid = '0000ffe0-0000-1000-8000-00805f9b34fb';
 
 async function registerHandler(server) {
   const service = await server.getPrimaryService(serviceUuid);
 
   const characteristics = await service.getCharacteristics();
-  const oximetry = characteristics[1];
+  const oximetry = characteristics[3];
 
   console.log('characteristics', characteristics);
   console.log('oximetry', oximetry);
@@ -98,3 +102,4 @@ async function registerHandler(server) {
 }
 
 export { registerHandler, serviceUuid }
+
